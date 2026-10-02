@@ -1,4 +1,4 @@
-function [e_analy, AOP_analy, RAAN_analy, i_analy, a_analy] = AnalyticalSolution (kep, tau, theta0, deg)
+function [e_analy, AOP_analy, RAAN_analy, i_analy, a_analy] = AnalyticalSolution (kep, tau, theta0, deg, a_IC)
 %ANALYTICALSOLUTION Analytical mean eccentricity-vector solution.
 %
 %   [e_analy, AOP_analy, RAAN_analy, i_analy, a_analy] = ...
@@ -25,7 +25,7 @@ param.mu = 4.9028000661637961E+03;    % Moon's gravity [km^3/s^2] (SPICE)
 
 [~,~,~,C_mtx,S_mtx] = CoefMoon;
 
-[kepp] = mean2osc_KL_moon (kep, 'osc');
+[kepp, ~, ~] = mean_elements_first_revolution_v2(kep, a_IC);
         
 a_m = kepp(1,:);
 e_m = kepp(2,:);
