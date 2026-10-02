@@ -58,7 +58,7 @@ for ii = 1:length(e_v)
         INC = i_v(jj);
         kep = [a'; e'; INC'; RAAN'; AOP'; MA'];
 
-        [e_analy, AOP_analy, RAAN_analy, i_analy, a_analy] = AnalyticalSolution(kep, tau, theta0, deg);
+        [e_analy, AOP_analy, RAAN_analy, i_analy, a_analy] = AnalyticalSolution(kep, tau, theta0, deg, R_moon+delta_a);
 
         e_analy_v(ii, :, jj)    = e_analy;
         AOP_analy_v(ii, :, jj)  = AOP_analy;
