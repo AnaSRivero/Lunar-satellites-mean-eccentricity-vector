@@ -1,65 +1,56 @@
 function C_comp = compute_Omega_dot(a_m, e_m, i_m, param, deg)
-% COMPUTE_OMEGA_DOT  Tasa secular de precesión del RAAN (dΩ/dt)
+% COMPUTE_OMEGA_DOT  Secular precession rate of the RAAN (dOmega/dt)
 %
 %   C_comp = compute_Omega_dot(a_m, e_m, i_m, param, deg)
 %
-%   Calcula la variación secular del nodo ascendente debida a los armónicos
-%   zonales pares del campo gravitatorio lunar (hasta el grado 'deg'),
-%   usando elementos medios de Kozai. Los coeficientes Jn se obtienen
-%   internamente de CoefMoon.m.
+%   Computes the secular variation of the ascending node due to the even
+%   zonal harmonics of the lunar gravity field (up to degree 'deg'), to
+%   first order in the harmonic coefficients, evaluated at the mean
+%   elements. The coefficients are obtained internally from CoefMoon.m.
 %
-%   La evolución del RAAN se obtiene como:
-%       Omega(t) = Omega_0 + C_comp * (t - t0)
+%   The evolution of the RAAN is obtained as:
+%       Omega(tau) = Omega_0 + C_comp * tau
+%   where tau = t / sqrt(Re^3/mu) is the dimensionless time.
 %
 % -------------------------------------------------------------------------
 % INPUTS
 % -------------------------------------------------------------------------
-%   a_m     [km]       Semieje mayor medio (escalar)
-%   e_m     [-]        Excentricidad media (escalar)
-%   i_m     [rad]      Inclinación media (escalar)
-%   param   struct     Parámetros del cuerpo central:
-%                        param.mu  [km^3/s^2]  Parámetro gravitacional
-%                        param.Re  [km]        Radio ecuatorial
-%   deg     [-]        Grado máximo de armónicos zonales pares a incluir
+%   a_m     [km]       Mean semi-major axis (scalar)
+%   e_m     [-]        Mean eccentricity (scalar)
+%   i_m     [rad]      Mean inclination (scalar)
+%   param   struct     Parameters of the central body:
+%                        param.Re  [km]        Equatorial radius
+%   deg     [-]        Maximum degree of the even zonal harmonics included
 %
 % -------------------------------------------------------------------------
 % OUTPUT
 % -------------------------------------------------------------------------
-%   C_comp  [rad/s]    Tasa secular dΩ/dt evaluada en los elementos medios
+%   C_comp  [rad per unit of dimensionless time]
+%                      Secular rate dOmega/dtau evaluated at the mean elements
 %
 % -------------------------------------------------------------------------
-% REFERENCIAS
+% REFERENCES
 % -------------------------------------------------------------------------
+%   - Kaula, W.M. (1966). "Theory of Satellite Geodesy." Blaisdell.
 %   - Kozai, Y. (1959). "The motion of a close earth satellite."
 %     AJ, 64, 367.
-%   - Brouwer, D. (1959). "Solution of the problem of artificial satellite
-%     theory without drag." AJ, 64, 378.
-%   - Liu, J.J.F. (1974). "Satellite motion about an oblate Earth."
-%     AIAA Journal, 12(11), 1511-1516. DOI: 10.2514/3.49537
-%   - Iorio, L. (2003). "The impact of the static part of the Earth's
-%     gravity field on some tests of GR with SLR." arXiv:gr-qc/0203050
 %
 % -------------------------------------------------------------------------
-% NOTAS
+% NOTES
 % -------------------------------------------------------------------------
-%   * Todos los inputs deben estar en unidades consistentes (SI o km+s).
-%   * Los Jn deben ser los coeficientes del cuerpo central correspondiente
-%     (usar GRGM1200A o LP150Q para la Luna, EGM2008 para la Tierra).
-%   * La fórmula es singular en la inclinación crítica i ~ 63.4° y sus
-%     armónicos superiores (singularidad de Kozai). Evitar su uso en la
-%     banda |i - i_crit| < 1°.
-%   * J5, J7 (armónicos impares) no contribuyen a la precesión secular
-%     del RAAN y no se incluyen.
+%   * The eccentricity dependence is truncated at order e^2.
+%   * The expression is singular at i = 0 (undefined node).
+%   * The odd zonal harmonics do not contribute to the first-order secular
+%     precession of the RAAN and are not included.
 
 % =========================================================
-% Variables auxiliares
+% Auxiliary variables
 % =========================================================
 n = sqrt(1 ./ (a_m/param.Re).^3);   % unperturbed mean motion
 
 % =========================================================
-% Bloque J2 (1er orden) + J2^2 (2do orden) + J4 (1er orden)
-% + J2^3 y J2*J4 (3er orden) + J3^2/J2
-% Kozai (1959), Liu (1974)
+% First-order secular contribution of the even zonal
+% harmonics J2, J4, ..., J_deg
 % =========================================================
 [~,~,~,C_mtx,~] = CoefMoon;
 C0 = [0;C_mtx(:,1)];

@@ -1,7 +1,7 @@
 function Pn = legendre_rec(n, x)
 %#codegen
-
-Pn = 0.0; % Inicialización obligatoria
+% Computes the Legendre polynomial P_n(x)
+Pn = 0.0; % mandatory initialization (code generation)
 
 P0 = 1.0;
 P1 = x;

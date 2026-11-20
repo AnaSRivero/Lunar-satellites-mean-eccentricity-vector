@@ -1,7 +1,7 @@
 function Pn1 = legendre_m1(n, x)
 %#codegen
-% Calcula P_n^1(x)
-Pn1 = 0.0; % Inicialización obligatoria
+% Computes the associated Legendre function P_n^1(x)
+Pn1 = 0.0; % mandatory initialization (code generation)
 
 if n < 1
     Pn1 = 0.0;

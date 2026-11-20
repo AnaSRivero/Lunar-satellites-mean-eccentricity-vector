@@ -1,8 +1,8 @@
 function Pn2 = legendre_m2(n, x)
 %#codegen
-% Calcula P_n^2(x)
-% Requiere n >= 2
-Pn2 = 0.0; % Inicialización obligatoria
+% Computes the associated Legendre function P_n^2(x)
+% Requires n >= 2
+Pn2 = 0.0; % mandatory initialization (code generation)
 
 if n < 2
     Pn2 = 0.0;
