@@ -34,7 +34,10 @@ function routines it depends on.
   precession rate from the even zonal harmonics.
 - `matlab/RACook_const.m`, `coeff_odd.m`, `Kaula_INC.m` — Cook's zonal
   frozen-eccentricity constants and the odd-tesseral forcing coefficients
-  entering the eccentricity-vector equations.
+  entering the eccentricity-vector equations. `Kaula_INC.m` evaluates the
+  inclination functions through numerically stable closed forms;
+  `Kaula_INC_series.m` is the direct series, kept as a fallback, which
+  loses precision in double arithmetic for degrees above about 20.
 - `matlab/legendre_rec.m`, `legendre_m1.m`, `legendre_m2.m`,
   `DerivadasLegendre.m` — associated Legendre polynomials/derivatives used
   by the functions above.

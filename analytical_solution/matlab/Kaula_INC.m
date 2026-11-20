@@ -1,62 +1,41 @@
 function F = Kaula_INC(l, m, p, INC)
-%--------------------------------------------------------------------------
-%  Computes Kaula's inclination function F_{lmp}(INC).
-%--------------------------------------------------------------------------
-%
-%   F = Kaula_INC(l, m, p, INC)
-%
-%   ------
-%   Inputs
-%   ------
-%   l, m, p           degree, order and index of Kaula's function
-%   INC       (1,1)   mean inclination [rad]
-%
-%   -------
-%   Outputs
-%   -------
-%   F         (1,1)   value of Kaula's inclination function []
-%
-%--------------------------------------------------------------------------
-
-% t limits
-if p <= (l-m)/2
-    t_max = p;
-elseif mod(l-m,2)
-    t_max = (l-m-1)/2;
-else
-    t_max = (l-m)/2;
-end
-
-%% Computation of the summation with respect to t
-F = 0;
-for i = 0:t_max  
-    S = 0;
-    for s = 0:m
-        % c limits
-        if m+i >= p+s
-            c_min = 0;
+% Numerically stable F_{lmp}(INC) for the index pairs used by the solution:
+%   odd l, p = (l-1)/2 or (l+1)/2  -> Gooding (2008) closed forms f^{+-}_{lm,1}
+%   even l, m = 0, p = l/2          -> F = P_l(0) P_l(cos I)
+% Falls back to the original series otherwise.
+x = cos(INC); S = sin(INC);
+if mod(l,2)==1 && (p == (l-1)/2 || p == (l+1)/2)
+    B  = (-1)^floor((l-m+1)/2) * exp(gammaln(l) - (l-1)*log(2) - gammaln((l+1)/2) - gammaln((l+3)/2));
+    P  = legendre(l, x);              % P_l^m(x), m = 0..l, Condon-Shortley phase
+    Pm = P(m+1); if m < l, Pm1 = P(m+2); else, Pm1 = 0; end
+    if m == 0
+        fp = 0;  fm = B*Pm1;          % f^-_{l0} = -B S P_l' = B P_l^1
+    else
+        if m == 1
+            PmS = -dPl(l, x);          % P_l^1/sin(I) = -P_l'(cos I): exact, also at I = 0, pi
         else
-            c_min = p-i-m+s;
+            PmS = Pm/S;                % ~ sin(I)^(m-1) -> 0 at I = 0 for m >= 2
+            if S == 0, PmS = 0; end
         end
-        if m+p+i >= l+s
-            c_max = l-m-2*i+s;
-        else
-            c_max = p-i;
-        end
-    
-        %% Computation of the summation with respect to c
-        C = 0;
-        for c = c_min:c_max
-            if mod(l-m,2)
-                ex = c-0.5*(l-m-1);
-            else
-                ex = c-0.5*(l-m);
-            end
-            C = C + factorial(l-m-2*i+s)/(factorial(c)*factorial(l-m-2*i+s-c))*factorial(m-s)/(factorial(p-i-c)*factorial(m-s-p+i+c))/(factorial(l-m-2*i))*(-1)^(ex);
-        end
-        S = S + factorial(m)/(factorial(s)*factorial(m-s))*cos(INC)^s*C;
+        fp = m*B*(-1)^m*PmS;
+        fm = B*(-1)^m*(m*x*PmS + Pm1);
     end
-    F = F + factorial(2*l-2*i)/(factorial(i)*factorial(l-i)*2^(2*l-2*i))*sin(INC).^(l-m-2*i)*S;
+    if p == (l-1)/2, F = (fp+fm)/2; else, F = (fp-fm)/2; end
+elseif mod(l,2)==0 && m==0 && p==l/2
+    F = legendre_rec(l,0)*legendre_rec(l,x);
+else
+    F = Kaula_INC_series(l,m,p,INC);
+end
 end
 
+function d = dPl(l, x)
+% derivative of the Legendre polynomial P_l at x (stable recurrence)
+P0 = 1; P1 = x; d0 = 0; d1 = 1;
+if l == 0, d = 0; return; elseif l == 1, d = 1; return; end
+for n = 1:l-1
+    P2 = ((2*n+1)*x*P1 - n*P0)/(n+1);
+    d2 = (n+1)*P1 + x*d1;
+    P0 = P1; P1 = P2; d0 = d1; d1 = d2;
+end
+d = d1;
 end
