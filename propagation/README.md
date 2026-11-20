@@ -44,10 +44,23 @@ interface.
   mean initial elements, so this script must be run before
   `../analytical_solution/matlab/run_analytical_solution.m`.
 
+- `matlab/propagate_reduced_model_cases.m` — propagates the two cases of
+  Section 5 used to assess the effect of the omitted harmonics, with
+  reduced numerical models of the lunar gravity field: one keeping only
+  the harmonics retained in the analytical solution (all zonal and
+  odd-degree non-zonal harmonics), and one adding back selected
+  even-degree non-zonal harmonics (C22, S22, C43, S43 in the first case;
+  C22, S22 in the second). No third-body attraction is included.
+- `matlab/getMoonPropagatorReduced.m` — propagator with the same
+  integrator settings as `getMoonPropagator.m` and a reduced gravity
+  field.
+- `matlab/buildSelectiveLunarGravityModel.m` — writes the filtered copy of
+  `lunar_grail.gfc` read by the reduced propagator, in the same data
+  folder.
+
 ## Usage
 
-1. Edit the paths at the top of `propagate_single_case.m` /
-   `propagate_grid_campaign.m` / `propagate_initial_revolution_campaign.m`
+1. Edit the paths at the top of the `propagate_*.m` script to be run
    (`orekitJarDir`, `orekitDataDir`) to point to your local Orekit jars
    and data folder.
 2. Run the script from MATLAB with `matlab/` on the path.

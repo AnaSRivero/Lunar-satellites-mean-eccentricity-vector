@@ -25,3 +25,10 @@ For one altitude (25, 50 or 75 km), run in this order, setting the same
    solution over the same grid.
 4. `analytical_solution/matlab/eccentricity_error_map.m` — maximum
    eccentricity difference between the two solutions and its map.
+
+## Reduced-model comparisons
+
+`propagation/matlab/propagate_reduced_model_cases.m` reproduces the
+reduced numerical propagations of Section 5, in which selected
+even-degree non-zonal harmonics are added back to the harmonics retained
+in the analytical solution.
