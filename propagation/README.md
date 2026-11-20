@@ -51,12 +51,3 @@ interface.
    (`orekitJarDir`, `orekitDataDir`) to point to your local Orekit jars
    and data folder.
 2. Run the script from MATLAB with `matlab/` on the path.
-
-## Notes for reviewers
-
-- Only the code and configuration specific to this study are included
-  here. Orekit itself and the generic `orekit-data` physical data set are
-  publicly available third-party resources and are referenced, not
-  vendored, above.
-- Absolute Windows paths from the authors' original development machine
-  have been replaced by configurable variables at the top of each script.
