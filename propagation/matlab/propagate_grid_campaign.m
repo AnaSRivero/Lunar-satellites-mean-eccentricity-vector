@@ -2,7 +2,7 @@
 % Propagates a grid of initial conditions (e0, i0) at a fixed altitude and
 % saves the full (a, e, i, RAAN, AOP) time histories. This is the batch
 % script behind the eccentricity-error maps used to characterize the
-% domain of validity of the analytical solution (Section 6 of the paper).
+% domain of applicability of the analytical solution (Section 5 of the paper).
 %
 % Generalizes the original 'Campain_propagation.m' / '_server.m' scripts:
 % just change delta_a / Name below to reproduce each altitude case
@@ -17,8 +17,8 @@ outputDir     = './Propagations';
 if ~exist(outputDir, 'dir'); mkdir(outputDir); end
 
 %% 2. Campaign parameters
-Name    = 'R50';      % run label, used in the saved .mat file names
-delta_a = 50;         % altitude above the lunar surface [km]
+Name    = 'R75';      % run label, used in the saved .mat file names
+delta_a = 75;         % altitude above the lunar surface [km]
 degree  = 50;
 order   = 50;
 ThirdBody = 1;        % 1: include Earth + Sun

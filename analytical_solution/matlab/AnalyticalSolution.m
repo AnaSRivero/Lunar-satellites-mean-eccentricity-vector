@@ -2,18 +2,24 @@ function [e_analy, AOP_analy, RAAN_analy, i_analy, a_analy] = AnalyticalSolution
 %ANALYTICALSOLUTION Analytical mean eccentricity-vector solution.
 %
 %   [e_analy, AOP_analy, RAAN_analy, i_analy, a_analy] = ...
-%       AnalyticalSolution(kep, tau, theta0, deg)
+%       AnalyticalSolution(kep, tau, theta0, deg, a_IC)
 %
 %   Cook's zonal eccentricity-vector framework extended with the
 %   odd-degree tesseral/sectorial forcing terms derived in the paper.
 %
 %   INPUTS
-%     kep    = [a; e; i; RAAN; AOP; M] osculating Keplerian elements at
-%              epoch [km, -, rad, rad, rad, rad]
+%     kep    = 5xN osculating Keplerian elements [a; e; i; RAAN; AOP]
+%              [km, -, rad, rad, rad] of the reference propagation over
+%              one revolution centred at the initial epoch, sampled as in
+%              propagate_initial_revolution_campaign.m. They are averaged
+%              by mean_elements_first_revolution_v2.m to estimate the mean
+%              initial elements of the solution.
 %     tau    = dimensionless time vector at which to evaluate the solution
-%              (tau = t / sqrt(Re^3/mu))
+%              (tau = t / sqrt(Re^3/mu), with t measured from the epoch)
 %     theta0 = Moon's rotation angle at epoch [rad]
-%     deg    = maximum degree of the odd-tesseral/zonal series
+%     deg    = maximum degree of the lunar gravity field
+%     a_IC   = initial osculating semi-major axis [km], which defines the
+%              length of the averaging revolution
 %
 %   OUTPUTS
 %     e_analy, AOP_analy, RAAN_analy, i_analy, a_analy = mean orbital

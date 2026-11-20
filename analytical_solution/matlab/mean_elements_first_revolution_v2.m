@@ -1,11 +1,12 @@
 function [kep_m, T0, mean_vars] = mean_elements_first_revolution_v2(kep, a_IC)
-% MEAN_ELEMENTS_FIRST_REVOLUTION
+% MEAN_ELEMENTS_FIRST_REVOLUTION_V2
 %
-% Computes mean orbital elements over the first orbital revolution
-% from a propagation expressed in osculating Keplerian elements.
+% Estimates mean orbital elements at the initial epoch by averaging the
+% osculating Keplerian elements of a numerical propagation over one
+% orbital revolution centred at that epoch.
 %
 % Instead of averaging e, omega, i and Omega separately, the following
-% nonsingular variables are averaged:
+% nonsingular variables are averaged (together with a):
 %
 %   xi  = e*cos(omega)
 %   eta = e*sin(omega)
@@ -13,9 +14,8 @@ function [kep_m, T0, mean_vars] = mean_elements_first_revolution_v2(kep, a_IC)
 %   p   = tan(i/2)*sin(Omega)
 %   q   = tan(i/2)*cos(Omega)
 %
-% The averaging interval is exactly one initial Keplerian orbital period.
-% If the final time of the period does not coincide with a stored sample,
-% the variables are linearly interpolated at t = T0.
+% The averaging interval is exactly one initial Keplerian orbital period
+% T0, from -T0/2 to T0/2 with respect to the epoch.
 %
 %
 % INPUT
@@ -28,7 +28,13 @@ function [kep_m, T0, mean_vars] = mean_elements_first_revolution_v2(kep, a_IC)
 %       kep(4,:) = RAAN    [rad]
 %       kep(5,:) = AOP     [rad]
 %
-% dt  : sampling time [s]
+%       sampled at the times
+%           t = unique(sort([-T0/2:60:T0/2, -T0/2, 0, T0/2]))   [s]
+%       i.e. every 60 s from -T0/2, plus the epoch and the end point
+%       (see propagation/matlab/propagate_initial_revolution_campaign.m).
+%
+% a_IC : initial osculating semi-major axis [km], which defines
+%        T0 = 2*pi*sqrt(a_IC^3/mu)
 %
 %
 % OUTPUT
@@ -58,10 +64,6 @@ function [kep_m, T0, mean_vars] = mean_elements_first_revolution_v2(kep, a_IC)
 %
 %   p   = tan(i/2)*sin(Omega)
 %   q   = tan(i/2)*cos(Omega)
-%
-% IMPORTANT:
-% Check that this p-q convention is the same one used in your analytical
-% model.
 
     %% -------------------------------------------------------------
     % Constants
@@ -175,4 +177,4 @@ function [kep_m, T0, mean_vars] = mean_elements_first_revolution_v2(kep, a_IC)
     mean_vars.p   = p_m;
     mean_vars.q   = q_m;
 
-end
+end

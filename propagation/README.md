@@ -26,8 +26,8 @@ interface.
 - `matlab/getMoonPropagator.m` — builds a numerical propagator around the
   Moon (lunar gravity field of a given degree/order + optional Earth/Sun
   third-body attraction), using the full GRGM1200B field (all harmonics up
-  to the requested degree/order). This is the propagator used for every
-  reported result.
+  to the requested degree/order). This is the propagator used for the
+  reference propagations.
 - `matlab/propagate_single_case.m` — propagates one initial condition and
   plots the osculating elements (a, e, i, RAAN, AOP) vs. time. This is the
   fully osculating reference used against the analytical (mean-element)
@@ -37,12 +37,19 @@ interface.
   full time histories; this produced the eccentricity-error maps used to
   characterize the domain of validity of the analytical solution. Edit
   `delta_a`/`Name` at the top to reproduce each altitude case (25/50/75 km).
+- `matlab/propagate_initial_revolution_campaign.m` — for the same grid,
+  force model and epoch, propagates one revolution centred at the initial
+  epoch and saves the osculating elements every 60 s. These short
+  histories are averaged by the analytical-solution code to estimate the
+  mean initial elements, so this script must be run before
+  `../analytical_solution/matlab/run_analytical_solution.m`.
 
 ## Usage
 
 1. Edit the paths at the top of `propagate_single_case.m` /
-   `propagate_grid_campaign.m` (`orekitJarDir`, `orekitDataDir`) to point
-   to your local Orekit jars and data folder.
+   `propagate_grid_campaign.m` / `propagate_initial_revolution_campaign.m`
+   (`orekitJarDir`, `orekitDataDir`) to point to your local Orekit jars
+   and data folder.
 2. Run the script from MATLAB with `matlab/` on the path.
 
 ## Notes for reviewers
