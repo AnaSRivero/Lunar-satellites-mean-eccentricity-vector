@@ -17,12 +17,5 @@ This code needs two things placed in one local folder (referred to as
    truncations up to degree/order 50 (see `getMoonPropagator.m`). Copy
    this file into the same folder as the `orekit-data` set above.
 
-   Note: the header of the original ICGEM file was missing the
-   `tide_system`, `errors` and `norm` keys, which some Orekit versions
-   (e.g. 13.1.4) require and otherwise reject with an "unexpected file
-   format" error. The header shipped here adds those keys (values
-   `tide_free` / `formal` / `fully_normalized`, matching the model's
-   actual properties); the coefficient data itself is untouched.
-
 No other data files (space weather, DE44x ephemerides, etc.) beyond what
 `orekit-data` already provides are used by this propagation code.
