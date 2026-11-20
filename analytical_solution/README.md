@@ -62,18 +62,3 @@ depends on.
 3. To obtain the error map, run `matlab/eccentricity_error_map.m` after
    the numerical grid campaign of the same altitude.
 
-## Notes for reviewers
-
-- The mean initial elements are numerical estimates obtained from the
-  reference propagation, not an exact transformation to the mean elements
-  of the analytical theory.
-- The original development pipeline ran a MATLAB-Coder-generated MEX file
-  (compiled for Windows, `.mexw64`) for speed on the full 100x100 grid.
-  That binary is a build artifact, not source code, and is
-  platform-specific, so it is not included here — this release calls the
-  plain `AnalyticalSolution.m` function directly, which gives identical
-  results, just slower on the full grid.
-- Only the code path actually used by `run_analytical_solution.m` is
-  included. Other exploratory/plotting scripts and alternate solution
-  variants present in the authors' working repository are not part of
-  this release.
