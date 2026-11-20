@@ -8,10 +8,9 @@ depends on.
 
 ## Requirements
 
-- MATLAB. No toolboxes beyond base MATLAB are required (Parallel
-  Computing Toolbox is only used for the `parfor` loop in
-  `run_analytical_solution.m`; replace it with a plain `for` if not
-  available — the loop is embarrassingly parallel either way).
+- MATLAB. No toolboxes beyond base MATLAB are required. The Parallel
+  Computing Toolbox is used, if available, by the `parfor` loop in
+  `run_analytical_solution.m`; without it the loop runs serially.
 - The one-revolution reference propagations produced by
   `../propagation/matlab/propagate_initial_revolution_campaign.m`, which
   require Orekit (see `../propagation/README.md`).
